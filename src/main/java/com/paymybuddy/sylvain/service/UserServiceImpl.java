@@ -6,6 +6,7 @@ import com.paymybuddy.sylvain.dao.UserDAO;
 import com.paymybuddy.sylvain.dto.BuddyFormDto;
 import com.paymybuddy.sylvain.dto.UserRegistrationDto;
 import com.paymybuddy.sylvain.exception.DataAlreadyExistException;
+import com.paymybuddy.sylvain.exception.DataNotFoundException;
 import com.paymybuddy.sylvain.model.Relation;
 import com.paymybuddy.sylvain.model.Role;
 import com.paymybuddy.sylvain.model.User;
@@ -91,6 +92,9 @@ public class UserServiceImpl implements  UserService {
         }
 
         User buddy = userDao.findByEmail(buddyFormDto.getBuddy());
+        if(buddy == null) {
+            throw  new DataNotFoundException("buddy doesnt exist");
+        }
         Relation relation = new Relation();
         relation.setOwner(owner);
         relation.setBuddy(buddy);

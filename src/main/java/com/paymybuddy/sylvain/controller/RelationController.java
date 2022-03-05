@@ -1,5 +1,7 @@
 package com.paymybuddy.sylvain.controller;
 import com.paymybuddy.sylvain.dto.BuddyFormDto;
+import com.paymybuddy.sylvain.exception.DataAlreadyExistException;
+import com.paymybuddy.sylvain.exception.DataNotFoundException;
 import com.paymybuddy.sylvain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 
 
 @Controller
@@ -28,11 +32,16 @@ public class RelationController {
 
     @PostMapping("/addBuddy")
     public String addBuddy(@ModelAttribute("buddy") BuddyFormDto buddyFormDto,
-                           @AuthenticationPrincipal UserDetails userDetails) {
+                           @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
 
         buddyFormDto.setOwner(userDetails.getUsername());
+        try {
+            userService.addBuddy(buddyFormDto);
+        } catch (DataAlreadyExistException | DataNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errors", List.of(e.getMessage()));
+            return "redirect:/user/relation";
+        }
 
-        userService.addBuddy(buddyFormDto);
         return "redirect:/user/relation?success";
     }
 
