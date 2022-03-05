@@ -24,7 +24,7 @@ public class BankAccount {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bankAccount")
     private List<ExternalTransfer> externalTransfers;
 
     public BankAccount() {

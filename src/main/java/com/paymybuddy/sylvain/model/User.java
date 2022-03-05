@@ -1,6 +1,6 @@
 package com.paymybuddy.sylvain.model;
 
-import javax.management.relation.Relation;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -36,8 +36,8 @@ public class User {
     @OneToMany(mappedBy = "user")//, fetch = FetchType.EAGER)
     private List<BankAccount> bankAccounts;
 
-//    @OneToMany(mappedBy = "owner" , cascade = CascadeType.ALL)
-//    private List<Relation> relations;
+    @OneToMany(mappedBy = "owner" , cascade = CascadeType.ALL)
+    private List<Relation> relations;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -130,13 +130,13 @@ public class User {
         this.bankAccounts = bankAccounts;
     }
 
-//    public List<Relation> getRelations() {
-//        return relations;
-//    }
+    public List<Relation> getRelations() {
+        return relations;
+    }
 
-//    public void setRelations(List<Relation> relations) {
-//        this.relations = relations;
-//    }
+    public void setRelations(List<Relation> relations) {
+        this.relations = relations;
+    }
 
     public Collection<Role> getRoles() {
         return roles;
