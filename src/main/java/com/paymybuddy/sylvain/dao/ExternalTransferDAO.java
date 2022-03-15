@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExternalTransferDAO extends JpaRepository<ExternalTransfer,Integer> {
+    ExternalTransfer[] findAllByBankAccount_User_EmailOrderByTransactionDateDesc(String emailOwner);
 }
