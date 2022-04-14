@@ -28,20 +28,16 @@ public class InternalTransferController {
     @Autowired
     private UserService userService;
 
-
-
     @GetMapping("/transfer")
     public String internalTransferPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         model.addAttribute("transfers", transferService.findInternalTransferByUser(userDetails.getUsername()));
         model.addAttribute("relations", userService.listEmailRelation(userDetails.getUsername()));
         model.addAttribute("internalTransfer", new InternalTransferDto());
-
         return "internalTransfer";
     }
 
     @PostMapping("/transfer/doInternalTransfer")
     public String doInternalTransfer(@ModelAttribute InternalTransferDto internalTransferDto, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes ) {
-
         internalTransferDto.setEmailSender(userDetails.getUsername());
         try{
             transferService.doInternalTransfer(internalTransferDto);

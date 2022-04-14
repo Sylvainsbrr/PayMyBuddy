@@ -32,7 +32,8 @@ public class RelationController {
 
     @PostMapping("/addBuddy")
     public String addBuddy(@ModelAttribute("buddy") BuddyFormDto buddyFormDto,
-                           @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
+                           @AuthenticationPrincipal UserDetails userDetails,
+                           RedirectAttributes redirectAttributes) {
 
         buddyFormDto.setOwner(userDetails.getUsername());
         try {
@@ -41,7 +42,6 @@ public class RelationController {
             redirectAttributes.addFlashAttribute("errors", List.of(e.getMessage()));
             return "redirect:/user/relation";
         }
-
         return "redirect:/user/relation?success";
     }
 

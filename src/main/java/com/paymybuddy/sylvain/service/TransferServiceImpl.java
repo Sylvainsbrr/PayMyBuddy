@@ -32,7 +32,6 @@ public class TransferServiceImpl implements TransferService{
     @Autowired
     private BankAccountDAO bankAccountDao;
 
-
     @Override
     public List<InternalTransferDto> findInternalTransferByUser(String emailOwner) {
         List<InternalTransferDto> internalTransferDtos = new ArrayList<>();
@@ -54,11 +53,11 @@ public class TransferServiceImpl implements TransferService{
     public InternalTransferDto doInternalTransfer(InternalTransferDto internalTransferDto) {
         Relation relation = relationDao.findByOwner_EmailAndBuddy_Email(internalTransferDto.getEmailSender(),
                 internalTransferDto.getEmailReceiver());
-        // verifier leur amitié
+        // Verification de la relation
         if (relation == null) {
             throw new DataNotFoundException("les 2 user ne sont pas amis");
         }
-        // on check si le sender à assez d'argent pour la transaction
+        // Verification du montant minimum pour la transaction
         if (internalTransferDto.getAmount().compareTo(relation.getOwner().getBalance()) > 0) {
             throw new DataNotExisteException("fonds insuffisants");
         }
@@ -72,7 +71,7 @@ public class TransferServiceImpl implements TransferService{
         transferDao.save(internalTransfer);
 
         internalTransferDto.setId(internalTransfer.getId());
-        // on met a jours les balance des 2 users
+        // On met a jour la balance des 2 UTILISATEURS
 
         relation.getOwner().setBalance(relation.getOwner().getBalance().subtract(internalTransferDto.getAmount()));
         relation.getBuddy().setBalance(relation.getBuddy().getBalance().add(internalTransferDto.getAmount()));
@@ -99,7 +98,7 @@ public class TransferServiceImpl implements TransferService{
 
     @Override
     public ExternalTransferDto doExternalTransfer(ExternalTransferDto externalTransferDto) {
-        // récupérer le bank account en fontion de l'iban et de l'email du user
+        // Recuperation bankaccount en fontion de l'iban et de l'email du user
         BankAccount bankAccount = bankAccountDao.findBankAccountByIbanAndUser_Email(externalTransferDto.getIbanUser(),
                 externalTransferDto.getEmailUser());
         User user = bankAccount.getUser();
@@ -122,10 +121,5 @@ public class TransferServiceImpl implements TransferService{
         userDao.save(user);
 
         return externalTransferDto;
-
     }
-
-
-
-
 }

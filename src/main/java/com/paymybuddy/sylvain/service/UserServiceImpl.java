@@ -44,15 +44,13 @@ public class UserServiceImpl implements  UserService {
         if(user == null){
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
-
     }
+
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
         System.out.println(roles);
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
-
 
     @Override
     public User save(UserRegistrationDto userRegistrationDto) {
@@ -61,7 +59,6 @@ public class UserServiceImpl implements  UserService {
                 new Date(), Arrays.asList(role));
         return userDao.save(user);
     }
-
 
     @Override
     public List<Relation> listEmailRelation(String emailOwner) {
@@ -81,7 +78,6 @@ public class UserServiceImpl implements  UserService {
     @Transactional
     public User addBuddy(BuddyFormDto buddyFormDto) {
         User owner = userDao.findByEmail(buddyFormDto.getOwner());
-
         // Si le owner a des relations
         if(owner.getRelations() != null && !owner.getRelations().isEmpty()) {
             // alors verifier si la relation existe deja
@@ -105,6 +101,5 @@ public class UserServiceImpl implements  UserService {
 
         owner.getRelations().add(relation);
         return userDao.save(owner);
-
     }
 }

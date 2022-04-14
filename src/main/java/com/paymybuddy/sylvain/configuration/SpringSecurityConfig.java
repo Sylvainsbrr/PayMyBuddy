@@ -21,11 +21,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity ) throws Exception{
-        httpSecurity.authorizeRequests().antMatchers(
-                        "/registration**",
-                        "/js/**",
-                        "/css/**",
-                        "/img/**").permitAll()
+        httpSecurity.authorizeRequests().antMatchers("/registration**", "/js/**", "/css/**", "/img/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -38,7 +35,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
-
     }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){

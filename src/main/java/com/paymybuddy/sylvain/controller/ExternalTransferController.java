@@ -27,7 +27,6 @@ public class ExternalTransferController {
     @Autowired
     private BankAccountService bankAccountService;
 
-
     @GetMapping("/extransfer")
     public String externalTransferPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         model.addAttribute("externalTransfers", transferService.findExternalTransferByUser(userDetails.getUsername()));
@@ -35,7 +34,6 @@ public class ExternalTransferController {
         model.addAttribute("listBankAccount",bankAccountService.findBankAccountByUser(userDetails.getUsername()));
         model.addAttribute("bankAccount", new BankAccount());
         return "extransfer";
-
     }
 
     @PostMapping("/extransfer/doExternalTransfer")
@@ -43,7 +41,6 @@ public class ExternalTransferController {
         externalTransferDto.setEmailUser(userDetails.getUsername());
         transferService.doExternalTransfer(externalTransferDto);
         return "redirect:/user/extransfer";
-
     }
 
     @PostMapping("/extransfer/addBankAccount")

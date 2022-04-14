@@ -32,11 +32,10 @@ public class BankAccountServiceImpl implements BankAccountService{
     @Override
     public BankAccount addBankAccount(String emailOwner, BankAccountDto bankAccountDto) throws SQLException {
         if (bankAccountDto.getIban().isBlank()) {
-            throw new DataMissingException("L'iban ne peut pas être vide !!");
+            throw new DataMissingException("iban cant be emty");
         }
 
         User user = userDao.findByEmail(emailOwner);
-
         String iban = bankAccountDto.getIban();
         BankAccount bankAccount = bankAccountDao.findBankAccountByIban(iban);
 
@@ -56,9 +55,9 @@ public class BankAccountServiceImpl implements BankAccountService{
             }
             return bankAccount;
         } else if (bankAccount.getUser().equals(user)) {
-            throw new DataAlreadyExistException("Vous possedez deja ce compte bancaire !");
+            throw new DataAlreadyExistException("bankAccount already exist");
         } else {
-            throw new DataAlreadyExistException("Ce compte bancaire appartient à un autre utilisateur !");
+            throw new DataAlreadyExistException("bankAccount owned by another user");
         }
     }
 
@@ -70,7 +69,5 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
         return false;
     }
-
-
 }
 
